@@ -14,3 +14,7 @@ services:
         sync: false
       - key: COMMIT_FREQUENCY
         value: "*/30 * * * *"
+      - key: RENDER
+        value: "true"
+      - key: PORT
+        value: "10000"

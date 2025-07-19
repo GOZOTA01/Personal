@@ -291,13 +291,13 @@ const server = http.createServer((req, res) => {
   }
 });
 
-// Start the server if running directly
+// Start the HTTP server immediately (required for Render)
+server.listen(PORT, () => {
+  console.log(`HTTP server running on port ${PORT} (process ${process.pid})`);
+});
+
+// Start the bot if running directly
 if (require.main === module) {
-  // Start the HTTP server
-  server.listen(PORT, () => {
-    console.log(`HTTP server running on port ${PORT}`);
-  });
-  
   // Run the function once when the script starts
   updateActivityLog();
 

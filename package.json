@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "check-server": "node check-server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "bot": "node cli.js"
   },
