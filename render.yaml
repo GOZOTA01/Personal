@@ -1,0 +1,15 @@
+services:
+  - type: worker
+    name: github-activity-bot
+    env: node
+    buildCommand: npm install
+    startCommand: node index.js
+    envVars:
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: GITHUB_USERNAME
+        sync: false
+      - key: GITHUB_REPO
+        sync: false
+      - key: COMMIT_FREQUENCY
+        value: "*/30 * * * *"

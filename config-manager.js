@@ -58,6 +58,11 @@ class ConfigManager {
           "config",
           "tests"
         ]
+      },
+      cleanup: {
+        enabled: false,
+        maxFiles: 50,
+        olderThanDays: 7
       }
     };
   }
@@ -127,6 +132,20 @@ class ConfigManager {
 
   getMaxCommitsPerDay() {
     return this.config.commitPatterns.maxCommitsPerDay || 5;
+  }
+
+  shouldCleanup() {
+    return this.config.cleanup && this.config.cleanup.enabled;
+  }
+
+  getCleanupSettings() {
+    if (!this.config.cleanup) {
+      return { maxFiles: 50, olderThanDays: 7 };
+    }
+    return {
+      maxFiles: this.config.cleanup.maxFiles || 50,
+      olderThanDays: this.config.cleanup.olderThanDays || 7
+    };
   }
 }
 

@@ -1,0 +1,43 @@
+name: GitHub Activity Bot
+
+on:
+  schedule:
+    # Run at various times to appear more natural
+    - cron: '12 2,7,13,18,22 * * *'  # Odd hours to look less automated
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  update-activity:
+    runs-on: ubuntu-latest
+    steps:
+      # Add random delay to make the activity appear more natural
+      - name: Random delay
+        run: |
+          DELAY=$(( RANDOM % 900 ))
+          echo "Adding random delay of $DELAY seconds"
+          sleep $DELAY
+          
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.BOT_GITHUB_TOKEN }}
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Activity Bot"
+          git config --global user.email "bot@example.com"
+          
+      - name: Generate and commit content
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+          GITHUB_USERNAME: ${{ github.repository_owner }}
+          GITHUB_REPO: ${{ github.event.repository.name }}
+        run: node index.js

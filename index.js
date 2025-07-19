@@ -27,6 +27,13 @@ const updateActivityLog = async () => {
   try {
     console.log('Starting activity update...');
     
+    // Validate GitHub credentials first
+    const credentialsValid = await validateGitHubCredentials();
+    if (!credentialsValid) {
+      console.error('Cannot proceed with activity update due to invalid GitHub credentials');
+      return;
+    }
+    
     // Check if we should skip this commit based on configuration
     if (configManager.shouldSkipCommit()) {
       console.log('Skipping commit based on configuration settings (weekday/hours)');
@@ -99,6 +106,148 @@ const updateActivityLog = async () => {
   }
 };
 
+// Clean up old files to prevent excessive accumulation
+const cleanupOldFiles = () => {
+  if (!configManager.shouldCleanup()) {
+    return;
+  }
+
+  try {
+    console.log('Starting cleanup of old files...');
+    const { maxFiles, olderThanDays } = configManager.getCleanupSettings();
+    
+    // Get list of files created by the bot
+    const generatedFilePatterns = [
+      'sample-*.js', 
+      'sample-*.py', 
+      'sample-*.html', 
+      'notes-*.md', 
+      'data-*.json', 
+      'data-*.csv'
+    ];
+    
+    let filesToDelete = [];
+    
+    // Find files matching our patterns
+    generatedFilePatterns.forEach(pattern => {
+      try {
+        const files = execSync(`find . -name "${pattern}" -not -path "*/\.*" -type f`).toString().trim().split('\n');
+        files.forEach(file => {
+          if (file && file !== '.') {
+            filesToDelete.push(file);
+          }
+        });
+      } catch (error) {
+        // Ignore errors in find command
+      }
+    });
+    
+    // Skip if not enough files
+    if (filesToDelete.length <= maxFiles) {
+      console.log(`Only ${filesToDelete.length} generated files found, no cleanup needed`);
+      return;
+    }
+    
+    console.log(`Found ${filesToDelete.length} generated files, cleaning up old ones...`);
+    
+    // Get file stats and sort by modification time
+    const fileStats = filesToDelete
+      .map(file => {
+        try {
+          const stats = fs.statSync(file);
+          return { file, mtime: stats.mtime };
+        } catch (error) {
+          return null;
+        }
+      })
+      .filter(stat => stat !== null)
+      .sort((a, b) => a.mtime.getTime() - b.mtime.getTime());
+    
+    // Calculate cutoff date for files older than X days
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - olderThanDays);
+    
+    // Files to delete: older than cutoff date OR exceeding maxFiles limit (keeping newest)
+    const toDelete = fileStats.filter((stat, index) => 
+      stat.mtime < cutoffDate || index < fileStats.length - maxFiles
+    );
+    
+    // Delete the files
+    if (toDelete.length > 0) {
+      console.log(`Deleting ${toDelete.length} old files...`);
+      toDelete.forEach(stat => {
+        try {
+          fs.unlinkSync(stat.file);
+          console.log(`Deleted: ${stat.file}`);
+        } catch (error) {
+          console.error(`Failed to delete ${stat.file}:`, error.message);
+        }
+      });
+      
+      // Commit the deletions
+      try {
+        execSync('git add --all', { stdio: 'pipe' });
+        execSync('git commit -m "Cleanup: Removed old generated files"', { stdio: 'pipe' });
+        console.log('Successfully committed file cleanup');
+        
+        // Push changes
+        execSync('git push origin main', { stdio: 'pipe' });
+        console.log('Successfully pushed cleanup changes to GitHub');
+      } catch (error) {
+        console.error('Error committing cleanup changes:', error.message);
+      }
+    } else {
+      console.log('No files to clean up');
+    }
+  } catch (error) {
+    console.error('Error during cleanup:', error);
+  }
+};
+
+// Validate GitHub credentials
+const validateGitHubCredentials = async () => {
+  try {
+    // Check if GitHub token is set
+    if (!process.env.GITHUB_TOKEN) {
+      throw new Error('GITHUB_TOKEN is not set in .env file');
+    }
+
+    // Check if GitHub username is set
+    if (!process.env.GITHUB_USERNAME) {
+      throw new Error('GITHUB_USERNAME is not set in .env file');
+    }
+
+    // Check if GitHub repo is set
+    if (!process.env.GITHUB_REPO) {
+      throw new Error('GITHUB_REPO is not set in .env file');
+    }
+
+    // Test GitHub API access
+    console.log('Testing GitHub API access...');
+    const user = await octokit.users.getAuthenticated();
+    console.log(`Authenticated as GitHub user: ${user.data.login}`);
+
+    // Check if repository exists and is accessible
+    try {
+      const repoInfo = await octokit.repos.get({
+        owner: process.env.GITHUB_USERNAME,
+        repo: process.env.GITHUB_REPO
+      });
+      console.log(`Successfully accessed repository: ${repoInfo.data.full_name}`);
+      return true;
+    } catch (repoError) {
+      if (repoError.status === 404) {
+        throw new Error(`Repository ${process.env.GITHUB_USERNAME}/${process.env.GITHUB_REPO} not found or not accessible`);
+      } else {
+        throw repoError;
+      }
+    }
+  } catch (error) {
+    console.error('GitHub credential validation failed:', error.message);
+    return false;
+  }
+};
+
 // Check if the script is being run directly
 if (require.main === module) {
   // Run the function once when the script starts
@@ -122,7 +271,13 @@ if (require.main === module) {
     }
   });
   
+  // Run cleanup once a day at midnight
+  cron.schedule('0 0 * * *', () => {
+    console.log('Running scheduled cleanup...');
+    cleanupOldFiles();
+  });
+  
   console.log('GitHub Activity Bot is running...');
 }
 
-module.exports = { updateActivityLog };
+module.exports = { updateActivityLog, cleanupOldFiles, validateGitHubCredentials };

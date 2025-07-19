@@ -4,6 +4,8 @@ npm-debug.log
 
 # Environment configuration
 .env
+.env.local
+.env.*.local
 
 # OS specific files
 .DS_Store
@@ -14,3 +16,11 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# Generated files by the bot
+# Uncomment these if you don't want to track generated files
+# data-*.json
+# notes-*.md
+# sample-*.js
+# sample-*.py
+# sample-*.html

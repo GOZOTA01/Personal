@@ -147,7 +147,30 @@ npm run bot start
 For continuous operation, consider:
 1. Using PM2 (automatically installed when needed)
 2. Setting up as a service on your server
-3. Using a cloud platform like Heroku, AWS, or Azure
+3. Using a cloud platform like Heroku, AWS, or Render
+
+## Deployment
+
+For continuous operation, the bot needs to run on a server or cloud platform. See the [DEPLOYMENT.md](DEPLOYMENT.md) file for detailed instructions on various deployment options.
+
+### Quick Render Deployment
+
+To deploy to Render:
+
+1. Push your code to GitHub
+2. Sign in to your Render account
+3. Create a new Web Service
+   - Connect to your GitHub repository
+   - Set Environment to "Node"
+   - Set Build Command to: `npm install`
+   - Set Start Command to: `node index.js`
+   - Add the following environment variables:
+     - `GITHUB_TOKEN`: Your GitHub personal access token
+     - `GITHUB_USERNAME`: Your GitHub username
+     - `GITHUB_REPO`: Your target repository name
+     - `COMMIT_FREQUENCY`: Your preferred schedule (e.g., `*/30 * * * *`)
+
+The repository includes a `render.yaml` file for Blueprint deployments. See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed Render deployment instructions.
 
 ## Important Notes
 

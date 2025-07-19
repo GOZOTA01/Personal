@@ -20,6 +20,8 @@ Commands:
   stop          Stop the bot if running
   status        Check if the bot is running
   test          Test a single commit without scheduling
+  cleanup       Run the cleanup process to remove old generated files
+  validate      Validate GitHub credentials and repository access
   config        Open the configuration file
   setup         Interactive setup wizard
   help          Show this help message
@@ -184,6 +186,27 @@ switch (command) {
       console.log('Test complete');
     }).catch(err => {
       console.error('Test failed:', err);
+    });
+    break;
+  case 'cleanup':
+    console.log('Running file cleanup...');
+    const { cleanupOldFiles } = require('./index');
+    cleanupOldFiles();
+    console.log('Cleanup process complete');
+    break;
+  case 'validate':
+    console.log('Validating GitHub credentials...');
+    const { validateGitHubCredentials } = require('./index');
+    validateGitHubCredentials().then(valid => {
+      if (valid) {
+        console.log('GitHub credentials are valid and repository is accessible');
+      } else {
+        console.error('GitHub credential validation failed');
+        process.exit(1);
+      }
+    }).catch(err => {
+      console.error('Validation error:', err);
+      process.exit(1);
     });
     break;
   case 'config':

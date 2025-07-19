@@ -34,5 +34,10 @@
       "config",
       "tests"
     ]
+  },
+  "cleanup": {
+    "enabled": true,
+    "maxFiles": 50,
+    "olderThanDays": 7
   }
 }
