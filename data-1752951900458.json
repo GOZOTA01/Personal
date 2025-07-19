@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 84.71871063288994,
+      "description": "Added new feature implementation",
+      "timestamp": "2025-07-19T19:05:00.464Z"
+    },
+    {
+      "id": 2,
+      "value": 60.392050742992524,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-19T19:05:00.466Z"
+    },
+    {
+      "id": 3,
+      "value": 6.602888123179929,
+      "description": "Dependency updates",
+      "timestamp": "2025-07-19T19:05:00.466Z"
+    },
+    {
+      "id": 4,
+      "value": 93.77273737111582,
+      "description": "Performance optimization",
+      "timestamp": "2025-07-19T19:05:00.466Z"
+    }
+  ]
+}
