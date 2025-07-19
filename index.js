@@ -76,6 +76,17 @@ const updateActivityLog = async () => {
     console.log('Configuring Git user information...');
     execSync('git config user.name "GitHub Activity Bot"', { stdio: 'inherit' });
     execSync('git config user.email "bot@example.com"', { stdio: 'inherit' });
+    
+    // Check if 'origin' remote exists, if not, add it (important for Render environment)
+    try {
+      execSync('git remote get-url origin', { stdio: 'ignore' });
+      console.log('Remote origin already exists');
+    } catch (error) {
+      console.log('Setting up remote origin...');
+      const remoteUrl = `https://${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_USERNAME}/${process.env.GITHUB_REPO}.git`;
+      execSync(`git remote add origin ${remoteUrl}`, { stdio: 'inherit' });
+      console.log('Remote origin added successfully');
+    }
 
     // Generate a commit message based on the file type
     const commitMessage = `Update ${language} file: ${fileName}`;
