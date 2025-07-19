@@ -14,12 +14,3 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
-
-# Generated content files from the bot
-activity-*.md
-sample-*.js
-sample-*.py
-sample-*.html
-data-*.json
-data-*.csv
-notes-*.md

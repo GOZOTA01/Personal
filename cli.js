@@ -179,6 +179,7 @@ switch (command) {
     break;
   case 'test':
     console.log('Making a test commit...');
+    const { updateActivityLog } = require('./index');
     updateActivityLog().then(() => {
       console.log('Test complete');
     }).catch(err => {

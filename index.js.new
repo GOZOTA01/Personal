@@ -22,7 +22,7 @@ const getFormattedDate = () => {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 };
 
-// Update the repository with new content and commit locally
+// Update the repository with new content and push to GitHub
 const updateActivityLog = async () => {
   try {
     console.log('Starting activity update...');
@@ -64,34 +64,14 @@ const updateActivityLog = async () => {
     // Generate a commit message based on the file type
     const commitMessage = `Update ${language} file: ${fileName}`;
 
-    // Add and commit all files (including untracked files)
+    // Add and commit the file
     try {
-      // First commit the newly created file
-      execSync(`git add "${filePath}"`, { stdio: 'pipe' });
-      execSync(`git commit -m "${commitMessage}"`, { stdio: 'pipe' });
+      execSync(`git add "${filePath}"`, { stdio: 'ignore' });
+      execSync(`git commit -m "${commitMessage}"`, { stdio: 'ignore' });
       console.log(`Successfully committed ${filePath} to the local repository!`);
-      
-      // Check if there are any other untracked or modified files
-      const statusOutput = execSync('git status --porcelain').toString();
-      if (statusOutput.trim()) {
-        console.log('Found additional untracked or modified files, committing them as well...');
-        execSync('git add --all', { stdio: 'pipe' });
-        execSync('git commit -m "Update additional files"', { stdio: 'pipe' });
-        console.log('Successfully committed all remaining files!');
-      }
-      
-      // Try to push the changes to GitHub
-      try {
-        console.log('Pushing changes to GitHub...');
-        execSync('git push origin main', { stdio: 'pipe' });
-        console.log('Successfully pushed changes to GitHub!');
-      } catch (pushError) {
-        console.warn('Could not push to GitHub automatically:', pushError.message);
-        console.log('To push to GitHub manually, run: git push origin main');
-      }
+      console.log('To push to GitHub, run: git push origin main');
     } catch (error) {
       console.error('Error committing to local repository:', error.message);
-      console.error('Error details:', error.stderr ? error.stderr.toString() : 'No details available');
     }
 
   } catch (error) {
