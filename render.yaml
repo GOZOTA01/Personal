@@ -1,9 +1,10 @@
 services:
-  - type: worker
+  - type: web
     name: github-activity-bot
     env: node
     buildCommand: npm install
     startCommand: node index.js
+    plan: free
     envVars:
       - key: GITHUB_TOKEN
         sync: false

@@ -6,6 +6,7 @@ const path = require('path');
 const contentGenerator = require('./content-generator');
 const configManager = require('./config-manager');
 const { execSync } = require('child_process');
+const http = require('http');
 
 // GitHub authentication
 const octokit = new Octokit({
@@ -272,8 +273,31 @@ const validateGitHubCredentials = async () => {
   }
 };
 
-// Check if the script is being run directly
+// Add a simple HTTP server for Render deployment
+const PORT = process.env.PORT || 3000;
+
+// Create a simple HTTP server
+const server = http.createServer((req, res) => {
+  if (req.url === '/healthz') {
+    // Health check endpoint
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ status: 'ok', message: 'GitHub Activity Bot is running' }));
+  } else {
+    // Default response
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('GitHub Activity Bot\n\nThis is a background worker service that generates activity on GitHub.');
+  }
+});
+
+// Start the server if running directly
 if (require.main === module) {
+  // Start the HTTP server
+  server.listen(PORT, () => {
+    console.log(`HTTP server running on port ${PORT}`);
+  });
+  
   // Run the function once when the script starts
   updateActivityLog();
 
