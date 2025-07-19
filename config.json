@@ -1,0 +1,38 @@
+{
+  "contentTypes": {
+    "code": {
+      "enabled": true,
+      "weight": 3,
+      "languages": ["JavaScript", "Python", "HTML"]
+    },
+    "markdown": {
+      "enabled": true,
+      "weight": 2
+    },
+    "data": {
+      "enabled": true,
+      "weight": 1,
+      "formats": ["JSON", "CSV"]
+    }
+  },
+  "commitPatterns": {
+    "randomizeTime": true,
+    "weekdayOnly": false,
+    "workingHours": {
+      "enabled": false,
+      "startHour": 9,
+      "endHour": 17
+    },
+    "maxCommitsPerDay": 5
+  },
+  "directoryStructure": {
+    "useStructure": false,
+    "directories": [
+      "src",
+      "docs",
+      "data",
+      "config",
+      "tests"
+    ]
+  }
+}

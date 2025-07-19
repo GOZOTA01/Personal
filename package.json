@@ -1,0 +1,27 @@
+{
+  "name": "github-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "bot": "node cli.js"
+  },
+  "bin": {
+    "github-activity-bot": "./cli.js"
+  },
+  "keywords": [
+    "github",
+    "bot",
+    "activity",
+    "automation"
+  ],
+  "author": "",
+  "license": "ISC",
+  "description": "A bot that automatically pushes content to GitHub to maintain activity",
+  "dependencies": {
+    "@octokit/rest": "^22.0.0",
+    "dotenv": "^17.2.0",
+    "node-cron": "^4.2.1"
+  }
+}
