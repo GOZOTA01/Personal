@@ -27,6 +27,12 @@ const updateActivityLog = async () => {
   try {
     console.log('Starting activity update...');
     
+    // Check if running in Render environment
+    const isRenderEnvironment = process.env.RENDER === 'true';
+    if (isRenderEnvironment) {
+      console.log('Running in Render environment');
+    }
+    
     // Validate GitHub credentials first
     const credentialsValid = await validateGitHubCredentials();
     if (!credentialsValid) {
@@ -58,15 +64,18 @@ const updateActivityLog = async () => {
     fs.writeFileSync(path.join(__dirname, filePath), content);
     console.log(`File ${filePath} (${language}) created locally`);
 
-    // Create a local git repository if it doesn't exist
+    // Create a local git repository if it doesn't exist and ensure Git config is set
     try {
       execSync('git rev-parse --is-inside-work-tree', { stdio: 'ignore' });
     } catch (error) {
       console.log('Initializing git repository...');
       execSync('git init', { stdio: 'inherit' });
-      execSync('git config user.name "GitHub Activity Bot"', { stdio: 'inherit' });
-      execSync('git config user.email "bot@example.com"', { stdio: 'inherit' });
     }
+    
+    // Always set Git config to ensure it works in all environments (including Render)
+    console.log('Configuring Git user information...');
+    execSync('git config user.name "GitHub Activity Bot"', { stdio: 'inherit' });
+    execSync('git config user.email "bot@example.com"', { stdio: 'inherit' });
 
     // Generate a commit message based on the file type
     const commitMessage = `Update ${language} file: ${fileName}`;
