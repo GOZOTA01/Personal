@@ -29,6 +29,8 @@ Follow these instructions to deploy your GitHub Activity Bot to Render.
 2. Select "Web Service"
 
 > **Important:** The GitHub Activity Bot must be deployed as a Web Service, not a Background Worker, because it needs to bind to a port to keep the service active. The bot includes a minimal HTTP server that handles health checks and keeps Render from timing out.
+>
+> **Privacy Note:** Make sure to set the service to "Private" during setup to prevent public access to your bot.
 
 ## Step 4: Connect Your Repository
 

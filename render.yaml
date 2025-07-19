@@ -5,6 +5,8 @@ services:
     buildCommand: npm install
     startCommand: node index.js
     plan: free
+    # Set to private service to prevent public access
+    private: true
     envVars:
       - key: GITHUB_TOKEN
         sync: false

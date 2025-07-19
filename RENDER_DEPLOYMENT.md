@@ -29,6 +29,7 @@ This guide walks you through deploying your GitHub Activity Bot to Render with d
    - **Region**: Choose the region closest to you
    - **Branch**: `main` (or your default branch)
    - **Build Command**: `npm install`
+   - **Service Type**: Set to "Private Service" to prevent public access
    - **Start Command**: `node index.js`
 
 ![Service Configuration](https://i.imgur.com/xxxxxxxx.png)
