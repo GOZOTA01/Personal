@@ -1,5 +1,7 @@
 require('dotenv').config();
-const { Octokit } = require('@octokit/rest');
+// Using dynamic import for Octokit to handle ES modules
+let Octokit;
+// We'll initialize Octokit later in an async function
 const cron = require('node-cron');
 const fs = require('fs');
 const path = require('path');
@@ -8,14 +10,30 @@ const configManager = require('./config-manager');
 const { execSync } = require('child_process');
 const http = require('http');
 
-// GitHub authentication
-const octokit = new Octokit({
-  auth: process.env.GITHUB_TOKEN
-});
-
 // Repository information
 const owner = process.env.GITHUB_USERNAME;
 const repo = process.env.GITHUB_REPO;
+
+// We'll initialize this variable to hold the Octokit instance
+let octokit;
+
+// Function to initialize Octokit with proper authentication
+async function initOctokit() {
+  if (!octokit) {
+    try {
+      // Try to import @octokit/rest using dynamic import for ES modules
+      const { Octokit: DynamicOctokit } = await import('@octokit/rest');
+      octokit = new DynamicOctokit({
+        auth: process.env.GITHUB_TOKEN
+      });
+      console.log('Initialized Octokit using ES modules import');
+    } catch (error) {
+      console.error('Failed to import Octokit as ES Module:', error.message);
+      throw error;
+    }
+  }
+  return octokit;
+}
 
 // Get the current date in YYYY-MM-DD format
 const getFormattedDate = () => {
@@ -34,7 +52,8 @@ const updateActivityLog = async () => {
       console.log('Running in Render environment');
     }
     
-    // Validate GitHub credentials first
+    // Initialize Octokit and validate GitHub credentials first
+    await initOctokit();
     const credentialsValid = await validateGitHubCredentials();
     if (!credentialsValid) {
       console.error('Cannot proceed with activity update due to invalid GitHub credentials');
@@ -247,6 +266,9 @@ const validateGitHubCredentials = async () => {
       throw new Error('GITHUB_REPO is not set in .env file');
     }
 
+    // Initialize Octokit
+    await initOctokit();
+
     // Test GitHub API access
     console.log('Testing GitHub API access...');
     const user = await octokit.users.getAuthenticated();
@@ -298,8 +320,15 @@ server.listen(PORT, () => {
 
 // Start the bot if running directly
 if (require.main === module) {
-  // Run the function once when the script starts
-  updateActivityLog();
+  // Initialize Octokit and run the function once when the script starts
+  (async () => {
+    try {
+      await initOctokit();
+      updateActivityLog();
+    } catch (error) {
+      console.error('Failed to initialize Octokit:', error);
+    }
+  })();
 
   // Schedule the function to run on a regular basis
   const cronSchedule = process.env.COMMIT_FREQUENCY || '0 */6 * * *'; // Default: every 6 hours

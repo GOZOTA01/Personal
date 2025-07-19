@@ -24,8 +24,9 @@
   "license": "ISC",
   "description": "A bot that automatically pushes content to GitHub to maintain activity",
   "dependencies": {
-    "@octokit/rest": "^22.0.0",
+    "@octokit/rest": "^19.0.13",
     "dotenv": "^17.2.0",
     "node-cron": "^4.2.1"
-  }
+  },
+  "type": "commonjs"
 }

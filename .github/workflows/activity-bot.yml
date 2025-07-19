@@ -40,4 +40,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
           GITHUB_USERNAME: ${{ github.repository_owner }}
           GITHUB_REPO: ${{ github.event.repository.name }}
-        run: node index.js
+          NODE_OPTIONS: "--experimental-vm-modules"
+        run: |
+          # Update to the compatible version of @octokit/rest
+          npm install @octokit/rest@19.0.13
+          node index.js
