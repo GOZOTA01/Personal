@@ -17,6 +17,30 @@ const repo = process.env.GITHUB_REPO;
 // We'll initialize this variable to hold the Octokit instance
 let octokit;
 
+// Import our network utilities
+const networkUtils = require('./network-utils');
+
+// Function to synchronize with remote repository
+const syncWithRemote = async () => {
+  console.log('Synchronizing with remote repository...');
+  
+  // Check internet connectivity first
+  if (!networkUtils.checkInternetConnectivity()) {
+    console.error('No internet connectivity detected. Waiting and trying again...');
+    
+    // Wait for 30 seconds and try again
+    await new Promise(resolve => setTimeout(resolve, 30000));
+    
+    if (!networkUtils.checkInternetConnectivity()) {
+      console.error('Still no internet connectivity. Aborting sync operation.');
+      return false;
+    }
+  }
+  
+  // Use our new synchronization function
+  return await networkUtils.synchronizeWithRemote('origin', 'main', 'theirs');
+};
+
 // Function to initialize Octokit with proper authentication
 async function initOctokit() {
   if (!octokit) {
@@ -35,6 +59,45 @@ async function initOctokit() {
   return octokit;
 }
 
+// Configure Git properly for both authentication and conflict resolution
+const setupGitConfig = () => {
+  console.log('Configuring Git user information and settings...');
+  execSync('git config user.name "GitHub Activity Bot"', { stdio: 'inherit' });
+  execSync('git config user.email "bot@example.com"', { stdio: 'inherit' });
+  
+  // Configure merge and pull strategies
+  execSync('git config pull.rebase false', { stdio: 'pipe' }); // Use merge instead of rebase by default
+  execSync('git config push.default simple', { stdio: 'pipe' });
+  
+  // Configure conflict resolution strategy to favor ours in merge conflicts
+  execSync('git config merge.ours.driver true', { stdio: 'pipe' });
+  
+  // Apply network resilience improvements
+  networkUtils.enhanceGitNetworkResilience();
+  
+  // Check if 'origin' remote exists, if not, add it (important for Render environment)
+  try {
+    execSync('git remote get-url origin', { stdio: 'ignore' });
+    console.log('Remote origin already exists');
+    // Update the remote URL to ensure it has the token
+    const remoteUrl = `https://${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_USERNAME}/${process.env.GITHUB_REPO}.git`;
+    execSync(`git remote set-url origin ${remoteUrl}`, { stdio: 'ignore' });
+    console.log('Updated origin remote URL with authentication token');
+  } catch (error) {
+    console.log('Setting up remote origin...');
+    const remoteUrl = `https://${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_USERNAME}/${process.env.GITHUB_REPO}.git`;
+    execSync(`git remote add origin ${remoteUrl}`, { stdio: 'inherit' });
+    console.log('Remote origin added successfully');
+  }
+  
+  // Make sure we have the latest information about the remote
+  try {
+    networkUtils.executeGitCommandWithRetry('git fetch origin', { stdio: 'pipe' });
+  } catch (error) {
+    console.warn('Could not fetch from remote:', error.message);
+  }
+};
+
 // Get the current date in YYYY-MM-DD format
 const getFormattedDate = () => {
   const now = new Date();
@@ -45,6 +108,19 @@ const getFormattedDate = () => {
 const updateActivityLog = async () => {
   try {
     console.log('Starting activity update...');
+    
+    // First check for internet connectivity
+    if (!networkUtils.checkInternetConnectivity()) {
+      console.warn('No internet connectivity detected. Retrying in 30 seconds...');
+      await new Promise(resolve => setTimeout(resolve, 30000));
+      
+      if (!networkUtils.checkInternetConnectivity()) {
+        console.error('Still no internet connectivity. Aborting activity update.');
+        return;
+      }
+      
+      console.log('Internet connectivity restored. Continuing with activity update.');
+    }
     
     // Check if running in Render environment
     const isRenderEnvironment = process.env.RENDER === 'true';
@@ -93,25 +169,8 @@ const updateActivityLog = async () => {
     }
     
     // Always set Git config to ensure it works in all environments (including Render)
-    console.log('Configuring Git user information...');
-    execSync('git config user.name "GitHub Activity Bot"', { stdio: 'inherit' });
-    execSync('git config user.email "bot@example.com"', { stdio: 'inherit' });
+    setupGitConfig();
     
-    // Check if 'origin' remote exists, if not, add it (important for Render environment)
-    try {
-      execSync('git remote get-url origin', { stdio: 'ignore' });
-      console.log('Remote origin already exists');
-      // Update the remote URL to ensure it has the token
-      const remoteUrl = `https://${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_USERNAME}/${process.env.GITHUB_REPO}.git`;
-      execSync(`git remote set-url origin ${remoteUrl}`, { stdio: 'ignore' });
-      console.log('Updated origin remote URL with authentication token');
-    } catch (error) {
-      console.log('Setting up remote origin...');
-      const remoteUrl = `https://${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_USERNAME}/${process.env.GITHUB_REPO}.git`;
-      execSync(`git remote add origin ${remoteUrl}`, { stdio: 'inherit' });
-      console.log('Remote origin added successfully');
-    }
-
     // Generate a commit message based on the file type
     const commitMessage = `Update ${language} file: ${fileName}`;
 
@@ -134,11 +193,23 @@ const updateActivityLog = async () => {
       // Try to push the changes to GitHub
       try {
         console.log('Pushing changes to GitHub...');
-        execSync('git push origin main', { stdio: 'pipe' });
-        console.log('Successfully pushed changes to GitHub!');
+        
+        // Use our new pushWithSync function that handles synchronization before pushing
+        const pushResult = await networkUtils.pushWithSync('origin', 'main', 'theirs');
+        
+        if (pushResult) {
+          console.log('Successfully pushed changes to GitHub!');
+        } else {
+          // If pushWithSync returns false but doesn't throw, we consider it a handled failure
+          console.warn('Could not push to GitHub automatically. Will try again on next scheduled run.');
+          console.log('To push to GitHub manually, run: git push origin main');
+        }
       } catch (pushError) {
-        console.warn('Could not push to GitHub automatically:', pushError.message);
+        console.warn('Unexpected error when pushing to GitHub:', pushError.message);
         console.log('To push to GitHub manually, run: git push origin main');
+        
+        // Continue operation - we'll try again on next scheduled run
+        console.log('Continuing operation despite push failure. Will try again next run.');
       }
     } catch (error) {
       console.error('Error committing to local repository:', error.message);
@@ -151,13 +222,25 @@ const updateActivityLog = async () => {
 };
 
 // Clean up old files to prevent excessive accumulation
-const cleanupOldFiles = () => {
+const cleanupOldFiles = async () => {
   if (!configManager.shouldCleanup()) {
     return;
   }
 
   try {
     console.log('Starting cleanup of old files...');
+    
+    // Check internet connectivity first
+    if (!networkUtils.checkInternetConnectivity()) {
+      console.warn('No internet connectivity detected. Delaying cleanup...');
+      await new Promise(resolve => setTimeout(resolve, 30000));
+      
+      if (!networkUtils.checkInternetConnectivity()) {
+        console.error('Still no internet connectivity. Aborting cleanup.');
+        return;
+      }
+    }
+    
     const { maxFiles, olderThanDays } = configManager.getCleanupSettings();
     
     // Get list of files created by the bot
@@ -226,20 +309,24 @@ const cleanupOldFiles = () => {
         } catch (error) {
           console.error(`Failed to delete ${stat.file}:`, error.message);
         }
-      });
-      
-      // Commit the deletions
-      try {
-        execSync('git add --all', { stdio: 'pipe' });
-        execSync('git commit -m "Cleanup: Removed old generated files"', { stdio: 'pipe' });
-        console.log('Successfully committed file cleanup');
-        
-        // Push changes
-        execSync('git push origin main', { stdio: 'pipe' });
-        console.log('Successfully pushed cleanup changes to GitHub');
-      } catch (error) {
-        console.error('Error committing cleanup changes:', error.message);
-      }
+      });        // Commit the deletions
+        try {
+          execSync('git add --all', { stdio: 'pipe' });
+          execSync('git commit -m "Cleanup: Removed old generated files"', { stdio: 'pipe' });
+          console.log('Successfully committed file cleanup');
+          
+          // Push changes with our new synchronization function
+          const pushResult = await networkUtils.pushWithSync('origin', 'main', 'theirs');
+          
+          if (pushResult) {
+            console.log('Successfully pushed cleanup changes to GitHub');
+          } else {
+            console.warn('Could not push cleanup changes. Will try again on next scheduled cleanup.');
+          }
+        } catch (error) {
+          console.error('Error committing cleanup changes:', error.message);
+          console.log('Continuing operation despite cleanup commit failure.');
+        }
     } else {
       console.log('No files to clean up');
     }
@@ -324,9 +411,19 @@ if (require.main === module) {
   (async () => {
     try {
       await initOctokit();
-      updateActivityLog();
+      
+      // Configure network resilience
+      networkUtils.enhanceGitNetworkResilience();
+      
+      // Check connectivity before starting
+      if (!networkUtils.checkInternetConnectivity()) {
+        console.warn('No internet connectivity detected at startup. The bot will continue to run but operations may fail until connectivity is restored.');
+      }
+      
+      // Run initial activity update
+      await updateActivityLog();
     } catch (error) {
-      console.error('Failed to initialize Octokit:', error);
+      console.error('Failed to initialize bot:', error);
     }
   })();
 
@@ -337,7 +434,20 @@ if (require.main === module) {
   // Add random delay if configured
   const shouldRandomize = configManager.config.commitPatterns.randomizeTime;
   
-  cron.schedule(cronSchedule, () => {
+  cron.schedule(cronSchedule, async () => {
+    // Check internet connectivity first
+    if (!networkUtils.checkInternetConnectivity()) {
+      console.warn('No internet connectivity detected. Delaying activity update...');
+      
+      // Wait and try again
+      await new Promise(resolve => setTimeout(resolve, 30000));
+      
+      if (!networkUtils.checkInternetConnectivity()) {
+        console.error('Still no internet connectivity after waiting. Skipping this scheduled run.');
+        return;
+      }
+    }
+    
     if (shouldRandomize) {
       // Random delay between 0 and 20 minutes
       const randomDelay = Math.floor(Math.random() * 20 * 60 * 1000);
