@@ -133,11 +133,11 @@ function isLocalBehindRemote(remote = 'origin', branch = 'main') {
  */
 function pullRemoteChanges(remote = 'origin', branch = 'main') {
   try {
-    console.log(`Pulling latest changes from ${remote}/${branch}...`);
-    executeGitCommandWithRetry(`git pull ${remote} ${branch}`, { stdio: 'pipe' });
+    console.log(`Pulling latest changes from ${remote}/${branch} with rebase...`);
+    executeGitCommandWithRetry(`git pull --rebase ${remote} ${branch}`, { stdio: 'pipe' });
     return true;
   } catch (error) {
-    console.error(`Error pulling from remote: ${error.message}`);
+    console.error(`Error pulling from remote with rebase: ${error.message}`);
     return false;
   }
 }
@@ -163,12 +163,43 @@ function resolveMergeConflicts(strategy = 'theirs') {
     // Stage the resolved files
     executeGitCommandWithRetry('git add .', { stdio: 'pipe' });
     
-    // Commit the merge
-    executeGitCommandWithRetry('git commit -m "Resolved merge conflicts"', { stdio: 'pipe' });
+    // Check if we're in a rebase
+    const isRebase = execSync('git rev-parse --git-dir', { stdio: 'pipe' })
+      .toString().trim() + '/rebase-merge';
+    const isInRebase = execSync(`test -d "${isRebase}" && echo "true" || echo "false"`, { stdio: 'pipe' })
+      .toString().trim() === 'true';
+    
+    if (isInRebase) {
+      // Continue the rebase process
+      console.log('Continuing rebase after resolving conflicts...');
+      executeGitCommandWithRetry('git rebase --continue', { stdio: 'pipe' });
+    } else {
+      // Commit the merge
+      console.log('Committing resolved merge conflicts...');
+      executeGitCommandWithRetry('git commit -m "Resolved merge conflicts"', { stdio: 'pipe' });
+    }
     
     return true;
   } catch (error) {
     console.error(`Error resolving merge conflicts: ${error.message}`);
+    
+    // Check if we're in a rebase that's failing
+    try {
+      const isRebase = execSync('git rev-parse --git-dir', { stdio: 'pipe' })
+        .toString().trim() + '/rebase-merge';
+      const isInRebase = execSync(`test -d "${isRebase}" && echo "true" || echo "false"`, { stdio: 'pipe' })
+        .toString().trim() === 'true';
+      
+      if (isInRebase) {
+        // Abort the rebase to get back to a clean state
+        console.log('Aborting problematic rebase...');
+        executeGitCommandWithRetry('git rebase --abort', { stdio: 'pipe' });
+        return false;
+      }
+    } catch (checkError) {
+      console.error(`Error checking rebase status: ${checkError.message}`);
+    }
+    
     return false;
   }
 }
@@ -191,13 +222,13 @@ function synchronizeWithRemote(remote = 'origin', branch = 'main', conflictStrat
     
     // Check if we're behind the remote
     if (isLocalBehindRemote(remote, branch)) {
-      console.log('Local repository is behind remote, pulling changes...');
+      console.log('Local repository is behind remote, pulling changes with rebase...');
       
       try {
-        // Try to pull changes
+        // Try to pull changes with rebase
         pullRemoteChanges(remote, branch);
       } catch (pullError) {
-        console.error(`Error during pull, might be merge conflicts: ${pullError.message}`);
+        console.error(`Error during pull with rebase, might be merge conflicts: ${pullError.message}`);
         
         // Check if there are merge conflicts
         const hasConflicts = execSync('git status --porcelain', { stdio: 'pipe' })
@@ -209,11 +240,45 @@ function synchronizeWithRemote(remote = 'origin', branch = 'main', conflictStrat
           console.log('Detected merge conflicts, attempting to resolve...');
           if (!resolveMergeConflicts(conflictStrategy)) {
             console.error('Failed to resolve merge conflicts.');
-            return false;
+            
+            // Try a different approach - abort any rebase and do a hard reset
+            try {
+              console.log('Attempting to abort any ongoing rebase...');
+              execSync('git rebase --abort', { stdio: 'ignore' });
+            } catch (e) {
+              // Ignore errors if we weren't in a rebase
+            }
+            
+            console.log('Resetting to remote state and applying our changes on top...');
+            try {
+              // Stash any changes
+              execSync('git stash', { stdio: 'pipe' });
+              
+              // Reset to remote
+              execSync(`git reset --hard ${remote}/${branch}`, { stdio: 'pipe' });
+              
+              // Apply stashed changes if any were stashed
+              const stashList = execSync('git stash list', { stdio: 'pipe' }).toString().trim();
+              if (stashList) {
+                execSync('git stash pop', { stdio: 'pipe' });
+              }
+              
+              return true;
+            } catch (resetError) {
+              console.error(`Error during reset attempt: ${resetError.message}`);
+              return false;
+            }
           }
         } else {
-          console.error('Unhandled error during pull, aborting.');
-          return false;
+          console.error('Unhandled error during pull, attempting reset to remote...');
+          try {
+            // Reset to remote
+            execSync(`git reset --hard ${remote}/${branch}`, { stdio: 'pipe' });
+            return true;
+          } catch (resetError) {
+            console.error(`Error during reset attempt: ${resetError.message}`);
+            return false;
+          }
         }
       }
     } else {
@@ -234,9 +299,12 @@ function synchronizeWithRemote(remote = 'origin', branch = 'main', conflictStrat
  * @param {string} [remote='origin'] - The name of the remote
  * @param {string} [branch='main'] - The branch to push
  * @param {string} [conflictStrategy='theirs'] - The strategy for handling conflicts
+ * @param {number} [retryCount=0] - Current retry count (used internally)
  * @returns {boolean} - True if push was successful
  */
-function pushWithSync(remote = 'origin', branch = 'main', conflictStrategy = 'theirs') {
+function pushWithSync(remote = 'origin', branch = 'main', conflictStrategy = 'theirs', retryCount = 0) {
+  const MAX_PUSH_RETRIES = 3;
+
   try {
     console.log(`Preparing to push changes to ${remote}/${branch}...`);
     
@@ -256,14 +324,18 @@ function pushWithSync(remote = 'origin', branch = 'main', conflictStrategy = 'th
     console.error(`Error pushing to remote: ${error.message}`);
     
     // If push failed due to non-fast-forward, try to recover
-    if (error.message.includes('non-fast-forward') || 
+    if ((error.message.includes('non-fast-forward') || 
         error.message.includes('fetch first') || 
-        error.message.includes('rejected')) {
-      console.log('Push rejected, attempting to recover...');
+        error.message.includes('rejected')) && retryCount < MAX_PUSH_RETRIES) {
+      console.log(`Push rejected, attempting to recover (Retry ${retryCount + 1} of ${MAX_PUSH_RETRIES})...`);
       
       // Try again with a full synchronization
       return synchronizeWithRemote(remote, branch, conflictStrategy) && 
-             pushWithSync(remote, branch, conflictStrategy);
+             pushWithSync(remote, branch, conflictStrategy, retryCount + 1);
+    }
+    
+    if (retryCount >= MAX_PUSH_RETRIES) {
+      console.error('Maximum push retries reached. Aborting push operation.');
     }
     
     return false;
