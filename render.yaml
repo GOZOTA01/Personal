@@ -2,7 +2,7 @@ services:
   - type: web
     name: github-activity-bot
     env: node
-    buildCommand: npm install
+    buildCommand: npm install && node fix-auth.js
     startCommand: node index.js
     plan: free
     # Set to private service to prevent public access
