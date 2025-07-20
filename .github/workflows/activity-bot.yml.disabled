@@ -1,10 +1,11 @@
-name: GitHub Activity Bot
+# Disabled - Bot is running on Render instead
+# name: GitHub Activity Bot
 
-on:
-  schedule:
-    # Run at various times to appear more natural
-    - cron: '12 2,7,13,18,22 * * *'  # Odd hours to look less automated
-  workflow_dispatch:  # Allow manual triggering
+# on:
+#   schedule:
+#     # Run at various times to appear more natural
+#     - cron: '12 2,7,13,18,22 * * *'  # Odd hours to look less automated
+#   workflow_dispatch:  # Allow manual triggering
 
 jobs:
   update-activity:
