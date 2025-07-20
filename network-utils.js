@@ -312,10 +312,15 @@ function pushWithSync(remote = 'origin', branch = 'main', conflictStrategy = 'th
     try {
       if (process.env.GITHUB_TOKEN) {
         console.log('Updating remote URL with authentication token...');
-        const username = process.env.GITHUB_USERNAME || 'x-access-token';
-        const repo = process.env.GITHUB_REPO || remote.replace('origin', '').replace(/^\/+/, '');
-        const authenticatedUrl = `https://${username}:${process.env.GITHUB_TOKEN}@github.com/${username}/${repo}.git`;
-        execSync(`git remote set-url ${remote} ${authenticatedUrl}`, { stdio: 'pipe' });
+        const githubUsername = process.env.GITHUB_USERNAME;
+        const repo = process.env.GITHUB_REPO;
+        if (githubUsername && repo) {
+          const authenticatedUrl = `https://x-access-token:${process.env.GITHUB_TOKEN}@github.com/${githubUsername}/${repo}.git`;
+          execSync(`git remote set-url ${remote} "${authenticatedUrl}"`, { stdio: 'pipe' });
+          console.log('Remote URL updated with token authentication');
+        } else {
+          console.error('GITHUB_USERNAME or GITHUB_REPO not set');
+        }
       }
     } catch (urlError) {
       console.warn(`Could not update remote URL: ${urlError.message}`);
@@ -471,8 +476,8 @@ function ensureGitHubAuthentication(remote = 'origin') {
     const username = process.env.GITHUB_USERNAME || repoPathMatch[1];
     const repo = process.env.GITHUB_REPO || repoPathMatch[2];
     
-    // Construct new authenticated URL
-    const authenticatedUrl = `https://${username}:${process.env.GITHUB_TOKEN}@github.com/${username}/${repo}.git`;
+    // Construct new authenticated URL with x-access-token format for PAT
+    const authenticatedUrl = `https://x-access-token:${process.env.GITHUB_TOKEN}@github.com/${username}/${repo}.git`;
     
     // Update the remote URL
     console.log(`Setting authenticated remote URL for ${remote}...`);

@@ -34,8 +34,8 @@ try {
   const username = process.env.GITHUB_USERNAME;
   const token = process.env.GITHUB_TOKEN;
   
-  // Create authenticated URL
-  const authenticatedUrl = `https://${username}:${token}@github.com/${username}/${process.env.GITHUB_REPO}.git`;
+  // Create authenticated URL using x-access-token format for PAT
+  const authenticatedUrl = `https://x-access-token:${token}@github.com/${username}/${process.env.GITHUB_REPO}.git`;
   
   // Update remote if it exists, add it if it doesn't
   try {
