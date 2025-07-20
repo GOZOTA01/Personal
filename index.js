@@ -66,7 +66,7 @@ const setupGitConfig = () => {
   execSync('git config user.email "bot@example.com"', { stdio: 'inherit' });
   
   // Configure merge and pull strategies
-  execSync('git config pull.rebase false', { stdio: 'pipe' }); // Use merge instead of rebase by default
+  execSync('git config pull.rebase true', { stdio: 'pipe' }); // Use rebase instead of merge by default
   execSync('git config push.default simple', { stdio: 'pipe' });
   
   // Configure conflict resolution strategy to favor ours in merge conflicts
@@ -75,19 +75,24 @@ const setupGitConfig = () => {
   // Apply network resilience improvements
   networkUtils.enhanceGitNetworkResilience();
   
-  // Check if 'origin' remote exists, if not, add it (important for Render environment)
-  try {
-    execSync('git remote get-url origin', { stdio: 'ignore' });
-    console.log('Remote origin already exists');
-    // Update the remote URL to ensure it has the token
-    const remoteUrl = `https://${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_USERNAME}/${process.env.GITHUB_REPO}.git`;
-    execSync(`git remote set-url origin ${remoteUrl}`, { stdio: 'ignore' });
-    console.log('Updated origin remote URL with authentication token');
-  } catch (error) {
-    console.log('Setting up remote origin...');
-    const remoteUrl = `https://${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_USERNAME}/${process.env.GITHUB_REPO}.git`;
-    execSync(`git remote add origin ${remoteUrl}`, { stdio: 'inherit' });
-    console.log('Remote origin added successfully');
+  // Ensure GitHub authentication is properly configured using our enhanced function
+  if (!networkUtils.ensureGitHubAuthentication('origin')) {
+    console.warn('GitHub authentication setup failed. Will retry on next operation.');
+    
+    // Fallback to basic remote setup
+    try {
+      execSync('git remote get-url origin', { stdio: 'ignore' });
+      console.log('Remote origin already exists');
+      // Update the remote URL to ensure it has the token
+      const remoteUrl = `https://${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_USERNAME}/${process.env.GITHUB_REPO}.git`;
+      execSync(`git remote set-url origin ${remoteUrl}`, { stdio: 'ignore' });
+      console.log('Updated origin remote URL with authentication token');
+    } catch (error) {
+      console.log('Setting up remote origin...');
+      const remoteUrl = `https://${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_USERNAME}/${process.env.GITHUB_REPO}.git`;
+      execSync(`git remote add origin ${remoteUrl}`, { stdio: 'inherit' });
+      console.log('Remote origin added successfully');
+    }
   }
   
   // Make sure we have the latest information about the remote
@@ -193,6 +198,13 @@ const updateActivityLog = async () => {
       // Try to push the changes to GitHub
       try {
         console.log('Pushing changes to GitHub...');
+        
+        // Ensure GitHub authentication is correctly configured
+        const authOk = networkUtils.ensureGitHubAuthentication('origin');
+        if (!authOk) {
+          console.error('Failed to configure GitHub authentication. Cannot push changes.');
+          return;
+        }
         
         // Use our new pushWithSync function that handles synchronization before pushing
         const pushResult = await networkUtils.pushWithSync('origin', 'main', 'theirs');
@@ -314,6 +326,13 @@ const cleanupOldFiles = async () => {
           execSync('git add --all', { stdio: 'pipe' });
           execSync('git commit -m "Cleanup: Removed old generated files"', { stdio: 'pipe' });
           console.log('Successfully committed file cleanup');
+          
+          // Ensure GitHub authentication is correctly configured
+          const authOk = networkUtils.ensureGitHubAuthentication('origin');
+          if (!authOk) {
+            console.error('Failed to configure GitHub authentication. Cannot push cleanup changes.');
+            return;
+          }
           
           // Push changes with our new synchronization function
           const pushResult = await networkUtils.pushWithSync('origin', 'main', 'theirs');

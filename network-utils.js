@@ -308,6 +308,19 @@ function pushWithSync(remote = 'origin', branch = 'main', conflictStrategy = 'th
   try {
     console.log(`Preparing to push changes to ${remote}/${branch}...`);
     
+    // Check if we need to update the remote URL with token
+    try {
+      if (process.env.GITHUB_TOKEN) {
+        console.log('Updating remote URL with authentication token...');
+        const username = process.env.GITHUB_USERNAME || 'x-access-token';
+        const repo = process.env.GITHUB_REPO || remote.replace('origin', '').replace(/^\/+/, '');
+        const authenticatedUrl = `https://${username}:${process.env.GITHUB_TOKEN}@github.com/${username}/${repo}.git`;
+        execSync(`git remote set-url ${remote} ${authenticatedUrl}`, { stdio: 'pipe' });
+      }
+    } catch (urlError) {
+      console.warn(`Could not update remote URL: ${urlError.message}`);
+    }
+    
     // First synchronize with remote
     if (!synchronizeWithRemote(remote, branch, conflictStrategy)) {
       console.error('Failed to synchronize with remote before pushing.');
@@ -414,6 +427,72 @@ function enhanceGitNetworkResilience() {
   configureGitRetry();
 }
 
+/**
+ * Verify and fix GitHub authentication by ensuring the remote URL contains the token
+ * 
+ * @param {string} [remote='origin'] - The name of the remote
+ * @returns {boolean} - True if authentication is properly configured
+ */
+function ensureGitHubAuthentication(remote = 'origin') {
+  try {
+    if (!process.env.GITHUB_TOKEN) {
+      console.error('GITHUB_TOKEN environment variable is not set. Cannot authenticate with GitHub.');
+      return false;
+    }
+
+    if (!process.env.GITHUB_USERNAME) {
+      console.warn('GITHUB_USERNAME environment variable is not set. Using token authentication only.');
+    }
+
+    // Get current remote URL
+    const currentUrl = execSync(`git remote get-url ${remote}`, { stdio: 'pipe' }).toString().trim();
+    
+    // Skip if already using token auth
+    if (currentUrl.includes('@github.com')) {
+      console.log('Remote URL already contains authentication information.');
+      
+      // Verify the authentication still works
+      try {
+        execSync('git ls-remote --heads origin', { stdio: 'pipe' });
+        console.log('GitHub authentication verified successfully.');
+        return true;
+      } catch (authTestError) {
+        console.warn('Current authentication may be invalid. Updating token...');
+      }
+    }
+    
+    // Extract repo info from current URL
+    const repoPathMatch = currentUrl.match(/github\.com[\/:]([^\/]+)\/([^\/\.]+)(?:\.git)?$/);
+    if (!repoPathMatch) {
+      console.error(`Unable to parse GitHub repo path from URL: ${currentUrl}`);
+      return false;
+    }
+    
+    const username = process.env.GITHUB_USERNAME || repoPathMatch[1];
+    const repo = process.env.GITHUB_REPO || repoPathMatch[2];
+    
+    // Construct new authenticated URL
+    const authenticatedUrl = `https://${username}:${process.env.GITHUB_TOKEN}@github.com/${username}/${repo}.git`;
+    
+    // Update the remote URL
+    console.log(`Setting authenticated remote URL for ${remote}...`);
+    execSync(`git remote set-url ${remote} "${authenticatedUrl}"`, { stdio: 'pipe' });
+    
+    // Test the connection
+    try {
+      execSync('git ls-remote --heads origin', { stdio: 'pipe' });
+      console.log('GitHub authentication configured successfully.');
+      return true;
+    } catch (testError) {
+      console.error(`Authentication test failed: ${testError.message}`);
+      return false;
+    }
+  } catch (error) {
+    console.error(`Error configuring GitHub authentication: ${error.message}`);
+    return false;
+  }
+}
+
 module.exports = {
   executeGitCommandWithRetry,
   checkInternetConnectivity,
@@ -426,5 +505,6 @@ module.exports = {
   pullRemoteChanges,
   resolveMergeConflicts,
   synchronizeWithRemote,
-  pushWithSync
+  pushWithSync,
+  ensureGitHubAuthentication
 };
