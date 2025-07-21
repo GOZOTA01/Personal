@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 53.72095291980399,
+      "description": "Updated the project configuration",
+      "timestamp": "2025-07-21T06:53:11.662Z"
+    },
+    {
+      "id": 2,
+      "value": 3.8363280851518855,
+      "description": "Documentation update",
+      "timestamp": "2025-07-21T06:53:11.662Z"
+    },
+    {
+      "id": 3,
+      "value": 76.84647586846538,
+      "description": "Added new feature implementation",
+      "timestamp": "2025-07-21T06:53:11.662Z"
+    },
+    {
+      "id": 4,
+      "value": 76.89205606069804,
+      "description": "Fixed a bug in the main module",
+      "timestamp": "2025-07-21T06:53:11.662Z"
+    },
+    {
+      "id": 5,
+      "value": 91.71577980663008,
+      "description": "UI/UX improvements",
+      "timestamp": "2025-07-21T06:53:11.662Z"
+    },
+    {
+      "id": 6,
+      "value": 52.931903671045625,
+      "description": "Security patch implementation",
+      "timestamp": "2025-07-21T06:53:11.662Z"
+    }
+  ]
+}
