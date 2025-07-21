@@ -1,0 +1,46 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 18.692764244744843,
+      "description": "Added unit tests",
+      "timestamp": "2025-07-21T07:41:19.260Z"
+    },
+    {
+      "id": 2,
+      "value": 94.62047419982274,
+      "description": "Added unit tests",
+      "timestamp": "2025-07-21T07:41:19.260Z"
+    },
+    {
+      "id": 3,
+      "value": 3.9831584423983935,
+      "description": "Updated the project configuration",
+      "timestamp": "2025-07-21T07:41:19.260Z"
+    },
+    {
+      "id": 4,
+      "value": 0.07849992047508358,
+      "description": "Added error handling",
+      "timestamp": "2025-07-21T07:41:19.260Z"
+    },
+    {
+      "id": 5,
+      "value": 94.2947173241626,
+      "description": "Security patch implementation",
+      "timestamp": "2025-07-21T07:41:19.260Z"
+    },
+    {
+      "id": 6,
+      "value": 56.34318557199446,
+      "description": "Fixed a bug in the main module",
+      "timestamp": "2025-07-21T07:41:19.260Z"
+    },
+    {
+      "id": 7,
+      "value": 47.3203297843245,
+      "description": "Integration with external API",
+      "timestamp": "2025-07-21T07:41:19.260Z"
+    }
+  ]
+}
