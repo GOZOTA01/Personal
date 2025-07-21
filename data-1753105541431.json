@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 56.335582248999536,
+      "description": "UI/UX improvements",
+      "timestamp": "2025-07-21T13:45:41.431Z"
+    },
+    {
+      "id": 2,
+      "value": 29.002062057785103,
+      "description": "Updated the project configuration",
+      "timestamp": "2025-07-21T13:45:41.431Z"
+    },
+    {
+      "id": 3,
+      "value": 86.6876192888657,
+      "description": "Code cleanup and optimization",
+      "timestamp": "2025-07-21T13:45:41.431Z"
+    },
+    {
+      "id": 4,
+      "value": 34.672794874489874,
+      "description": "Fixed a bug in the main module",
+      "timestamp": "2025-07-21T13:45:41.431Z"
+    },
+    {
+      "id": 5,
+      "value": 76.61581642072414,
+      "description": "Performance optimization",
+      "timestamp": "2025-07-21T13:45:41.431Z"
+    },
+    {
+      "id": 6,
+      "value": 76.35961756578617,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-21T13:45:41.431Z"
+    }
+  ]
+}
