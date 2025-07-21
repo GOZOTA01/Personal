@@ -1,0 +1,46 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 97.27263942069973,
+      "description": "Dependency updates",
+      "timestamp": "2025-07-21T12:17:20.373Z"
+    },
+    {
+      "id": 2,
+      "value": 10.504106562143111,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-21T12:17:20.373Z"
+    },
+    {
+      "id": 3,
+      "value": 83.67078527674231,
+      "description": "Added new feature implementation",
+      "timestamp": "2025-07-21T12:17:20.373Z"
+    },
+    {
+      "id": 4,
+      "value": 47.61015786364943,
+      "description": "Added error handling",
+      "timestamp": "2025-07-21T12:17:20.373Z"
+    },
+    {
+      "id": 5,
+      "value": 18.385822604861534,
+      "description": "UI/UX improvements",
+      "timestamp": "2025-07-21T12:17:20.373Z"
+    },
+    {
+      "id": 6,
+      "value": 69.0116412484075,
+      "description": "Dependency updates",
+      "timestamp": "2025-07-21T12:17:20.373Z"
+    },
+    {
+      "id": 7,
+      "value": 45.802550767529716,
+      "description": "Added new feature implementation",
+      "timestamp": "2025-07-21T12:17:20.373Z"
+    }
+  ]
+}
