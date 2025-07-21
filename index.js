@@ -176,6 +176,16 @@ const updateActivityLog = async () => {
     // Always set Git config to ensure it works in all environments (including Render)
     setupGitConfig();
     
+    // Log repository information for debugging
+    try {
+      const remoteUrl = execSync('git remote get-url origin', { stdio: 'pipe' }).toString().trim();
+      const maskedUrl = remoteUrl.replace(/(github_pat_[a-zA-Z0-9]+)/g, 'TOKEN_MASKED');
+      console.log('Git remote URL:', maskedUrl);
+      console.log('Current branch:', execSync('git branch --show-current', { stdio: 'pipe' }).toString().trim());
+    } catch (error) {
+      console.log('Could not determine git configuration:', error.message);
+    }
+    
     // Generate a commit message based on the file type
     const commitMessage = `Update ${language} file: ${fileName}`;
 
@@ -430,6 +440,13 @@ if (require.main === module) {
   (async () => {
     try {
       await initOctokit();
+      
+      // Log environment configuration for debugging
+      console.log('Bot Configuration:');
+      console.log('- GitHub User:', process.env.GITHUB_USERNAME);
+      console.log('- GitHub Repo:', process.env.GITHUB_REPO);
+      console.log('- Token length:', process.env.GITHUB_TOKEN ? process.env.GITHUB_TOKEN.length : 'Not set');
+      console.log('- Environment:', process.env.RENDER ? 'Render' : 'Local');
       
       // Configure network resilience
       networkUtils.enhanceGitNetworkResilience();

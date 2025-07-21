@@ -12,9 +12,9 @@ services:
       - key: GITHUB_TOKEN
         sync: false
       - key: GITHUB_USERNAME
-        sync: false
+        value: "GOZOTA01"
       - key: GITHUB_REPO
-        sync: false
+        value: "Personal"
       - key: COMMIT_FREQUENCY
         value: "*/30 * * * *"
       - key: RENDER
