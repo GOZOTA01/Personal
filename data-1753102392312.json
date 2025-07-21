@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 26.82541970623731,
+      "description": "UI/UX improvements",
+      "timestamp": "2025-07-21T12:53:12.312Z"
+    },
+    {
+      "id": 2,
+      "value": 91.52761861309315,
+      "description": "Dependency updates",
+      "timestamp": "2025-07-21T12:53:12.312Z"
+    },
+    {
+      "id": 3,
+      "value": 30.051863739588402,
+      "description": "Fixed a bug in the main module",
+      "timestamp": "2025-07-21T12:53:12.312Z"
+    },
+    {
+      "id": 4,
+      "value": 75.08956899047475,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-21T12:53:12.312Z"
+    }
+  ]
+}
