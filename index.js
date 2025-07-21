@@ -62,8 +62,9 @@ async function initOctokit() {
 // Configure Git properly for both authentication and conflict resolution
 const setupGitConfig = () => {
   console.log('Configuring Git user information and settings...');
-  execSync('git config user.name "GitHub Activity Bot"', { stdio: 'inherit' });
-  execSync('git config user.email "bot@example.com"', { stdio: 'inherit' });
+  // Use the actual GitHub account instead of bot account
+  execSync('git config user.name "GOZOTA01"', { stdio: 'inherit' });
+  execSync('git config user.email "121523307+GOZOTA01@users.noreply.github.com"', { stdio: 'inherit' });
   
   // Configure merge and pull strategies
   execSync('git config pull.rebase true', { stdio: 'pipe' }); // Use rebase instead of merge by default
