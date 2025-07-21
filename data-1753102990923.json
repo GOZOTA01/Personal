@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 53.051145884703146,
+      "description": "Code cleanup and optimization",
+      "timestamp": "2025-07-21T13:03:10.923Z"
+    },
+    {
+      "id": 2,
+      "value": 50.60785235706107,
+      "description": "Code cleanup and optimization",
+      "timestamp": "2025-07-21T13:03:10.923Z"
+    },
+    {
+      "id": 3,
+      "value": 91.3406495140855,
+      "description": "Added error handling",
+      "timestamp": "2025-07-21T13:03:10.923Z"
+    }
+  ]
+}
