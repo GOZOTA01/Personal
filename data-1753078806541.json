@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 74.12996689759268,
+      "description": "Added new feature implementation",
+      "timestamp": "2025-07-21T06:20:06.541Z"
+    },
+    {
+      "id": 2,
+      "value": 78.11125933203962,
+      "description": "Refactored for better performance",
+      "timestamp": "2025-07-21T06:20:06.541Z"
+    },
+    {
+      "id": 3,
+      "value": 97.17402505212817,
+      "description": "Security patch implementation",
+      "timestamp": "2025-07-21T06:20:06.541Z"
+    },
+    {
+      "id": 4,
+      "value": 27.454306061094748,
+      "description": "Documentation update",
+      "timestamp": "2025-07-21T06:20:06.541Z"
+    },
+    {
+      "id": 5,
+      "value": 90.02228852639668,
+      "description": "Documentation update",
+      "timestamp": "2025-07-21T06:20:06.541Z"
+    },
+    {
+      "id": 6,
+      "value": 52.81054020131987,
+      "description": "Security patch implementation",
+      "timestamp": "2025-07-21T06:20:06.541Z"
+    }
+  ]
+}
