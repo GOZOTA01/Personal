@@ -84,13 +84,13 @@ const setupGitConfig = () => {
       execSync('git remote get-url origin', { stdio: 'ignore' });
       console.log('Remote origin already exists');
       // Update the remote URL to ensure it has the token
-      const remoteUrl = `https://${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_USERNAME}/${process.env.GITHUB_REPO}.git`;
-      execSync(`git remote set-url origin ${remoteUrl}`, { stdio: 'ignore' });
+      const remoteUrl = `https://x-access-token:${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_USERNAME}/${process.env.GITHUB_REPO}.git`;
+      execSync(`git remote set-url origin "${remoteUrl}"`, { stdio: 'ignore' });
       console.log('Updated origin remote URL with authentication token');
     } catch (error) {
       console.log('Setting up remote origin...');
-      const remoteUrl = `https://${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_USERNAME}/${process.env.GITHUB_REPO}.git`;
-      execSync(`git remote add origin ${remoteUrl}`, { stdio: 'inherit' });
+      const remoteUrl = `https://x-access-token:${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_USERNAME}/${process.env.GITHUB_REPO}.git`;
+      execSync(`git remote add origin "${remoteUrl}"`, { stdio: 'inherit' });
       console.log('Remote origin added successfully');
     }
   }
