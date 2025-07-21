@@ -75,6 +75,25 @@ const setupGitConfig = () => {
   // Apply network resilience improvements
   networkUtils.enhanceGitNetworkResilience();
   
+  // Ensure proper branch setup
+  try {
+    const currentBranch = execSync('git branch --show-current', { stdio: 'pipe' }).toString().trim();
+    if (!currentBranch || currentBranch === '') {
+      console.log('Setting up main branch...');
+      // Check if main branch exists remotely
+      try {
+        execSync('git fetch origin main', { stdio: 'pipe' });
+        execSync('git checkout -B main origin/main', { stdio: 'pipe' });
+        console.log('Checked out main branch from remote');
+      } catch (error) {
+        console.log('Creating new main branch');
+        execSync('git checkout -b main', { stdio: 'pipe' });
+      }
+    }
+  } catch (error) {
+    console.warn('Branch setup warning:', error.message);
+  }
+  
   // Ensure GitHub authentication is properly configured using our enhanced function
   if (!networkUtils.ensureGitHubAuthentication('origin')) {
     console.warn('GitHub authentication setup failed. Will retry on next operation.');
@@ -175,6 +194,26 @@ const updateActivityLog = async () => {
     
     // Always set Git config to ensure it works in all environments (including Render)
     setupGitConfig();
+    
+    // Ensure we're on the main branch (critical for Render environment)
+    try {
+      const currentBranch = execSync('git branch --show-current', { stdio: 'pipe' }).toString().trim();
+      if (!currentBranch || currentBranch === '') {
+        console.log('No current branch detected, checking out main branch...');
+        // Try to checkout main branch, create if it doesn't exist
+        try {
+          execSync('git checkout main', { stdio: 'pipe' });
+        } catch (checkoutError) {
+          console.log('Main branch does not exist, creating and checking out main...');
+          execSync('git checkout -b main', { stdio: 'pipe' });
+        }
+        console.log('Successfully switched to main branch');
+      } else {
+        console.log('Current branch confirmed:', currentBranch);
+      }
+    } catch (branchError) {
+      console.warn('Could not determine or set branch:', branchError.message);
+    }
     
     // Log repository information for debugging
     try {
