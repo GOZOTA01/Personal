@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 3.195867778453987,
+      "description": "Performance optimization",
+      "timestamp": "2025-07-21T04:12:13.987Z"
+    },
+    {
+      "id": 2,
+      "value": 72.07116188952067,
+      "description": "Dependency updates",
+      "timestamp": "2025-07-21T04:12:13.987Z"
+    },
+    {
+      "id": 3,
+      "value": 49.59334718918489,
+      "description": "Code cleanup and optimization",
+      "timestamp": "2025-07-21T04:12:13.987Z"
+    },
+    {
+      "id": 4,
+      "value": 15.9614926013535,
+      "description": "Fixed a bug in the main module",
+      "timestamp": "2025-07-21T04:12:13.987Z"
+    },
+    {
+      "id": 5,
+      "value": 95.80486730166929,
+      "description": "Fixed a bug in the main module",
+      "timestamp": "2025-07-21T04:12:13.987Z"
+    },
+    {
+      "id": 6,
+      "value": 38.158029402837634,
+      "description": "Fixed a bug in the main module",
+      "timestamp": "2025-07-21T04:12:13.987Z"
+    }
+  ]
+}
