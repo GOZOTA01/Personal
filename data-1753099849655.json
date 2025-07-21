@@ -1,0 +1,34 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 36.36627241056583,
+      "description": "Integration with external API",
+      "timestamp": "2025-07-21T12:10:49.655Z"
+    },
+    {
+      "id": 2,
+      "value": 60.280045786096416,
+      "description": "Code cleanup and optimization",
+      "timestamp": "2025-07-21T12:10:49.655Z"
+    },
+    {
+      "id": 3,
+      "value": 30.398148844402474,
+      "description": "Integration with external API",
+      "timestamp": "2025-07-21T12:10:49.656Z"
+    },
+    {
+      "id": 4,
+      "value": 9.981308147511436,
+      "description": "Implemented user feedback",
+      "timestamp": "2025-07-21T12:10:49.656Z"
+    },
+    {
+      "id": 5,
+      "value": 51.055100980245705,
+      "description": "Security patch implementation",
+      "timestamp": "2025-07-21T12:10:49.656Z"
+    }
+  ]
+}
