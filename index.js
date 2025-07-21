@@ -173,6 +173,38 @@ const updateActivityLog = async () => {
     // Generate random file content
     const { fileName, content, language } = contentGenerator.generateRandomFile();
     
+    // Clean up old generated files to prevent backlog accumulation (only in Render environment)
+    if (process.env.RENDER) {
+      try {
+        console.log('Cleaning up old generated files...');
+        // Remove files older than 1 hour to prevent backlog processing
+        const oneHourAgo = Date.now() - (60 * 60 * 1000);
+        const files = require('fs').readdirSync('.');
+        const oldFiles = files.filter(file => {
+          if (file.match(/^(data-|notes-|sample-)\d+\.(json|csv|md|html|js|py)$/)) {
+            const timestamp = parseInt(file.match(/\d+/)[0]);
+            return timestamp < oneHourAgo;
+          }
+          return false;
+        });
+        
+        oldFiles.forEach(file => {
+          try {
+            require('fs').unlinkSync(file);
+            console.log(`Removed old file: ${file}`);
+          } catch (error) {
+            // Ignore errors for files that might not exist
+          }
+        });
+        
+        if (oldFiles.length > 0) {
+          console.log(`Cleaned up ${oldFiles.length} old files`);
+        }
+      } catch (error) {
+        console.warn('Could not clean up old files:', error.message);
+      }
+    }
+    
     // Determine file path (with directory if configured)
     const filePath = targetDir ? `${targetDir}/${fileName}` : fileName;
     
