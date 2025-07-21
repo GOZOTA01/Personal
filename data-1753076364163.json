@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 49.90367327648616,
+      "description": "Refactored for better performance",
+      "timestamp": "2025-07-21T05:39:24.163Z"
+    },
+    {
+      "id": 2,
+      "value": 15.724552634898913,
+      "description": "UI/UX improvements",
+      "timestamp": "2025-07-21T05:39:24.163Z"
+    },
+    {
+      "id": 3,
+      "value": 63.87658255617244,
+      "description": "Added unit tests",
+      "timestamp": "2025-07-21T05:39:24.163Z"
+    },
+    {
+      "id": 4,
+      "value": 75.11448956273126,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-21T05:39:24.163Z"
+    },
+    {
+      "id": 5,
+      "value": 83.08508140694468,
+      "description": "Documentation update",
+      "timestamp": "2025-07-21T05:39:24.163Z"
+    },
+    {
+      "id": 6,
+      "value": 38.503443005912565,
+      "description": "Integration with external API",
+      "timestamp": "2025-07-21T05:39:24.163Z"
+    }
+  ]
+}
