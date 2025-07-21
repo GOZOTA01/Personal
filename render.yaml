@@ -16,7 +16,7 @@ services:
       - key: GITHUB_REPO
         value: "Personal"
       - key: COMMIT_FREQUENCY
-        value: "0 */6 * * *"
+        value: "0 0,6,12,18 * * *"
       - key: RENDER
         value: "true"
       - key: PORT

@@ -134,6 +134,20 @@ const updateActivityLog = async () => {
   try {
     console.log('Starting activity update...');
     
+    // EMERGENCY: Check if we've committed in the last 5 hours to prevent rapid commits
+    try {
+      const lastCommitTime = execSync('git log -1 --format=%ct', { stdio: 'pipe' }).toString().trim();
+      const lastCommitDate = new Date(parseInt(lastCommitTime) * 1000);
+      const fiveHoursAgo = new Date(Date.now() - (5 * 60 * 60 * 1000));
+      
+      if (lastCommitDate > fiveHoursAgo) {
+        console.log(`Last commit was at ${lastCommitDate.toISOString()}, which is within 5 hours. Skipping to prevent rapid commits.`);
+        return; // Exit early to prevent rapid commits
+      }
+    } catch (error) {
+      console.warn('Could not check last commit time:', error.message);
+    }
+    
     // First check for internet connectivity
     if (!networkUtils.checkInternetConnectivity()) {
       console.warn('No internet connectivity detected. Retrying in 30 seconds...');
@@ -531,13 +545,24 @@ if (require.main === module) {
   })();
 
   // Schedule the function to run on a regular basis
-  const cronSchedule = process.env.COMMIT_FREQUENCY || '0 */6 * * *'; // Default: every 6 hours
+  const cronSchedule = process.env.COMMIT_FREQUENCY || '0 0,6,12,18 * * *'; // Default: 4 times per day
   console.log(`Setting up scheduled updates with cron pattern: ${cronSchedule}`);
   
   // Add random delay if configured
   const shouldRandomize = configManager.config.commitPatterns.randomizeTime;
   
   cron.schedule(cronSchedule, async () => {
+    // EMERGENCY: Additional safety check before any scheduled run
+    try {
+      const recentCommits = execSync('git log --oneline --since="4 hours ago"', { stdio: 'pipe' }).toString().trim().split('\n').filter(line => line.length > 0);
+      if (recentCommits.length > 3) {
+        console.log(`SAFETY CHECK: Found ${recentCommits.length} commits in last 4 hours. Skipping scheduled run to prevent spam.`);
+        return;
+      }
+    } catch (error) {
+      console.warn('Could not perform safety check:', error.message);
+    }
+    
     // Check internet connectivity first
     if (!networkUtils.checkInternetConnectivity()) {
       console.warn('No internet connectivity detected. Delaying activity update...');
