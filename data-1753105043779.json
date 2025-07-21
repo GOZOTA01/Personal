@@ -1,0 +1,46 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 92.94170442982515,
+      "description": "UI/UX improvements",
+      "timestamp": "2025-07-21T13:37:23.779Z"
+    },
+    {
+      "id": 2,
+      "value": 17.86215651713735,
+      "description": "Dependency updates",
+      "timestamp": "2025-07-21T13:37:23.779Z"
+    },
+    {
+      "id": 3,
+      "value": 36.218247341597674,
+      "description": "Added error handling",
+      "timestamp": "2025-07-21T13:37:23.779Z"
+    },
+    {
+      "id": 4,
+      "value": 10.519010338855782,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-21T13:37:23.779Z"
+    },
+    {
+      "id": 5,
+      "value": 69.84807802469655,
+      "description": "Integration with external API",
+      "timestamp": "2025-07-21T13:37:23.779Z"
+    },
+    {
+      "id": 6,
+      "value": 59.56092254279237,
+      "description": "Updated the project configuration",
+      "timestamp": "2025-07-21T13:37:23.779Z"
+    },
+    {
+      "id": 7,
+      "value": 60.85164559289766,
+      "description": "Dependency updates",
+      "timestamp": "2025-07-21T13:37:23.779Z"
+    }
+  ]
+}
