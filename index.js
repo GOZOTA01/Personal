@@ -235,14 +235,9 @@ const updateActivityLog = async () => {
       execSync(`git commit -m "${commitMessage}"`, { stdio: 'pipe' });
       console.log(`Successfully committed ${filePath} to the local repository!`);
       
-      // Check if there are any other untracked or modified files
-      const statusOutput = execSync('git status --porcelain').toString();
-      if (statusOutput.trim()) {
-        console.log('Found additional untracked or modified files, committing them as well...');
-        execSync('git add --all', { stdio: 'pipe' });
-        execSync('git commit -m "Update additional files"', { stdio: 'pipe' });
-        console.log('Successfully committed all remaining files!');
-      }
+      // Skip automatic processing of additional files to maintain proper commit frequency
+      // This prevents backlog processing that could cause rapid commits
+      console.log('Skipping additional file processing to maintain scheduled frequency');
       
       // Try to push the changes to GitHub
       try {
