@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 8.496443557897503,
+      "description": "Integration with external API",
+      "timestamp": "2025-07-21T14:24:44.982Z"
+    },
+    {
+      "id": 2,
+      "value": 79.82762279159657,
+      "description": "Dependency updates",
+      "timestamp": "2025-07-21T14:24:44.982Z"
+    },
+    {
+      "id": 3,
+      "value": 38.732661009474626,
+      "description": "UI/UX improvements",
+      "timestamp": "2025-07-21T14:24:44.982Z"
+    }
+  ]
+}
