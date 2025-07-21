@@ -1,0 +1,34 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 50.81858994518594,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-21T12:44:24.495Z"
+    },
+    {
+      "id": 2,
+      "value": 12.788120063798713,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-21T12:44:24.495Z"
+    },
+    {
+      "id": 3,
+      "value": 7.338259544520909,
+      "description": "Updated the project configuration",
+      "timestamp": "2025-07-21T12:44:24.495Z"
+    },
+    {
+      "id": 4,
+      "value": 58.95590229456402,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-21T12:44:24.495Z"
+    },
+    {
+      "id": 5,
+      "value": 76.76696407654951,
+      "description": "Added unit tests",
+      "timestamp": "2025-07-21T12:44:24.495Z"
+    }
+  ]
+}
