@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 97.86950460779502,
+      "description": "Security patch implementation",
+      "timestamp": "2025-07-21T07:20:12.125Z"
+    },
+    {
+      "id": 2,
+      "value": 11.522549256622073,
+      "description": "Refactored for better performance",
+      "timestamp": "2025-07-21T07:20:12.125Z"
+    },
+    {
+      "id": 3,
+      "value": 51.772711876555114,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-21T07:20:12.125Z"
+    },
+    {
+      "id": 4,
+      "value": 10.587065730656853,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-21T07:20:12.125Z"
+    },
+    {
+      "id": 5,
+      "value": 77.794420850579,
+      "description": "Updated the project configuration",
+      "timestamp": "2025-07-21T07:20:12.125Z"
+    },
+    {
+      "id": 6,
+      "value": 41.88552678717032,
+      "description": "Implemented user feedback",
+      "timestamp": "2025-07-21T07:20:12.125Z"
+    }
+  ]
+}
