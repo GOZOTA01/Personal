@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 14.082504863848467,
+      "description": "Security patch implementation",
+      "timestamp": "2025-07-21T06:52:23.914Z"
+    },
+    {
+      "id": 2,
+      "value": 18.427176051809944,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-21T06:52:23.914Z"
+    },
+    {
+      "id": 3,
+      "value": 52.551082244380176,
+      "description": "Implemented user feedback",
+      "timestamp": "2025-07-21T06:52:23.914Z"
+    }
+  ]
+}
