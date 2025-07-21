@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 94.65824014605106,
+      "description": "Refactored for better performance",
+      "timestamp": "2025-07-21T06:47:17.864Z"
+    },
+    {
+      "id": 2,
+      "value": 93.41863545560274,
+      "description": "Added new feature implementation",
+      "timestamp": "2025-07-21T06:47:17.864Z"
+    },
+    {
+      "id": 3,
+      "value": 72.2320970262879,
+      "description": "Dependency updates",
+      "timestamp": "2025-07-21T06:47:17.864Z"
+    }
+  ]
+}
