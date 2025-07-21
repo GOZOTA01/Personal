@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 78.17998666152245,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-21T13:03:55.537Z"
+    },
+    {
+      "id": 2,
+      "value": 14.78869984818113,
+      "description": "Integration with external API",
+      "timestamp": "2025-07-21T13:03:55.537Z"
+    },
+    {
+      "id": 3,
+      "value": 39.03640783102954,
+      "description": "Updated the project configuration",
+      "timestamp": "2025-07-21T13:03:55.537Z"
+    },
+    {
+      "id": 4,
+      "value": 42.46000071036781,
+      "description": "Updated the project configuration",
+      "timestamp": "2025-07-21T13:03:55.537Z"
+    }
+  ]
+}
