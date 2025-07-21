@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 21.397152670503814,
+      "description": "Updated the project configuration",
+      "timestamp": "2025-07-21T05:14:00.427Z"
+    },
+    {
+      "id": 2,
+      "value": 91.40394738204236,
+      "description": "Security patch implementation",
+      "timestamp": "2025-07-21T05:14:00.427Z"
+    },
+    {
+      "id": 3,
+      "value": 79.51257826880887,
+      "description": "Integration with external API",
+      "timestamp": "2025-07-21T05:14:00.427Z"
+    },
+    {
+      "id": 4,
+      "value": 20.187014083457854,
+      "description": "Fixed a bug in the main module",
+      "timestamp": "2025-07-21T05:14:00.427Z"
+    }
+  ]
+}
