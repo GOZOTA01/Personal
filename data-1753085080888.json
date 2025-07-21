@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 63.77342516495369,
+      "description": "Implemented user feedback",
+      "timestamp": "2025-07-21T08:04:40.888Z"
+    },
+    {
+      "id": 2,
+      "value": 24.167421728561557,
+      "description": "Documentation update",
+      "timestamp": "2025-07-21T08:04:40.888Z"
+    },
+    {
+      "id": 3,
+      "value": 49.27679411365003,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-21T08:04:40.888Z"
+    }
+  ]
+}
