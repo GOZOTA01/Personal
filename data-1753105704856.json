@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 99.84492460573219,
+      "description": "Added new feature implementation",
+      "timestamp": "2025-07-21T13:48:24.856Z"
+    },
+    {
+      "id": 2,
+      "value": 2.241168868201693,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-21T13:48:24.856Z"
+    },
+    {
+      "id": 3,
+      "value": 0.38330475631396244,
+      "description": "Dependency updates",
+      "timestamp": "2025-07-21T13:48:24.856Z"
+    },
+    {
+      "id": 4,
+      "value": 8.806915884021327,
+      "description": "Fixed a bug in the main module",
+      "timestamp": "2025-07-21T13:48:24.856Z"
+    },
+    {
+      "id": 5,
+      "value": 41.902594604244406,
+      "description": "UI/UX improvements",
+      "timestamp": "2025-07-21T13:48:24.856Z"
+    },
+    {
+      "id": 6,
+      "value": 23.35877162382274,
+      "description": "Performance optimization",
+      "timestamp": "2025-07-21T13:48:24.856Z"
+    }
+  ]
+}
