@@ -1,0 +1,34 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 10.117884027151247,
+      "description": "Dependency updates",
+      "timestamp": "2025-07-21T05:46:31.923Z"
+    },
+    {
+      "id": 2,
+      "value": 3.143163043655961,
+      "description": "UI/UX improvements",
+      "timestamp": "2025-07-21T05:46:31.923Z"
+    },
+    {
+      "id": 3,
+      "value": 73.90074994160165,
+      "description": "Fixed a bug in the main module",
+      "timestamp": "2025-07-21T05:46:31.923Z"
+    },
+    {
+      "id": 4,
+      "value": 70.49021842212768,
+      "description": "Dependency updates",
+      "timestamp": "2025-07-21T05:46:31.923Z"
+    },
+    {
+      "id": 5,
+      "value": 13.784147912372834,
+      "description": "Documentation update",
+      "timestamp": "2025-07-21T05:46:31.923Z"
+    }
+  ]
+}
