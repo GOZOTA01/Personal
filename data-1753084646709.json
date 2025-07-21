@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 27.653400828270925,
+      "description": "Refactored for better performance",
+      "timestamp": "2025-07-21T07:57:26.709Z"
+    },
+    {
+      "id": 2,
+      "value": 27.902034063859972,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-21T07:57:26.709Z"
+    },
+    {
+      "id": 3,
+      "value": 64.52473416358403,
+      "description": "Performance optimization",
+      "timestamp": "2025-07-21T07:57:26.709Z"
+    }
+  ]
+}
