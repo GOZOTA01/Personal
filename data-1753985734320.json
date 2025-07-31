@@ -1,0 +1,46 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 66.40082626535786,
+      "description": "Implemented user feedback",
+      "timestamp": "2025-07-31T18:15:34.320Z"
+    },
+    {
+      "id": 2,
+      "value": 87.58217826310805,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-31T18:15:34.321Z"
+    },
+    {
+      "id": 3,
+      "value": 67.75309637122682,
+      "description": "Added error handling",
+      "timestamp": "2025-07-31T18:15:34.321Z"
+    },
+    {
+      "id": 4,
+      "value": 43.59415820887038,
+      "description": "Updated the project configuration",
+      "timestamp": "2025-07-31T18:15:34.321Z"
+    },
+    {
+      "id": 5,
+      "value": 18.82903970674733,
+      "description": "Dependency updates",
+      "timestamp": "2025-07-31T18:15:34.321Z"
+    },
+    {
+      "id": 6,
+      "value": 1.5476052976397647,
+      "description": "Documentation update",
+      "timestamp": "2025-07-31T18:15:34.321Z"
+    },
+    {
+      "id": 7,
+      "value": 39.27041502872043,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-07-31T18:15:34.321Z"
+    }
+  ]
+}
