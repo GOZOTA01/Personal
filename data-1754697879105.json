@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 49.31742823760885,
+      "description": "Documentation update",
+      "timestamp": "2025-08-09T00:04:39.105Z"
+    },
+    {
+      "id": 2,
+      "value": 64.89771143650398,
+      "description": "Integration with external API",
+      "timestamp": "2025-08-09T00:04:39.105Z"
+    },
+    {
+      "id": 3,
+      "value": 48.56620267140042,
+      "description": "Fixed a bug in the main module",
+      "timestamp": "2025-08-09T00:04:39.105Z"
+    },
+    {
+      "id": 4,
+      "value": 54.69572423138918,
+      "description": "Added unit tests",
+      "timestamp": "2025-08-09T00:04:39.105Z"
+    },
+    {
+      "id": 5,
+      "value": 1.9328591663997807,
+      "description": "Performance optimization",
+      "timestamp": "2025-08-09T00:04:39.105Z"
+    },
+    {
+      "id": 6,
+      "value": 15.235589297909192,
+      "description": "Security patch implementation",
+      "timestamp": "2025-08-09T00:04:39.105Z"
+    }
+  ]
+}
