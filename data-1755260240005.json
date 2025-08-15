@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 90.82904901257358,
+      "description": "Security patch implementation",
+      "timestamp": "2025-08-15T12:17:20.005Z"
+    },
+    {
+      "id": 2,
+      "value": 73.48022387335132,
+      "description": "Added error handling",
+      "timestamp": "2025-08-15T12:17:20.005Z"
+    },
+    {
+      "id": 3,
+      "value": 29.491748761713154,
+      "description": "Added new feature implementation",
+      "timestamp": "2025-08-15T12:17:20.005Z"
+    }
+  ]
+}
