@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 38.35472478071667,
+      "description": "Refactored for better performance",
+      "timestamp": "2025-08-16T00:10:54.960Z"
+    },
+    {
+      "id": 2,
+      "value": 60.40698011892695,
+      "description": "Documentation update",
+      "timestamp": "2025-08-16T00:10:54.960Z"
+    },
+    {
+      "id": 3,
+      "value": 51.72155316811223,
+      "description": "Updated the project configuration",
+      "timestamp": "2025-08-16T00:10:54.960Z"
+    },
+    {
+      "id": 4,
+      "value": 80.93922474774054,
+      "description": "Refactored for better performance",
+      "timestamp": "2025-08-16T00:10:54.960Z"
+    },
+    {
+      "id": 5,
+      "value": 84.91621213601987,
+      "description": "Security patch implementation",
+      "timestamp": "2025-08-16T00:10:54.960Z"
+    },
+    {
+      "id": 6,
+      "value": 69.07524767949505,
+      "description": "Implemented user feedback",
+      "timestamp": "2025-08-16T00:10:54.960Z"
+    }
+  ]
+}
