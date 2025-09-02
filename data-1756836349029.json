@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 1.5210330492799295,
+      "description": "Integration with external API",
+      "timestamp": "2025-09-02T18:05:49.029Z"
+    },
+    {
+      "id": 2,
+      "value": 90.76010680056015,
+      "description": "UI/UX improvements",
+      "timestamp": "2025-09-02T18:05:49.029Z"
+    },
+    {
+      "id": 3,
+      "value": 1.2549207023554443,
+      "description": "Fixed a bug in the main module",
+      "timestamp": "2025-09-02T18:05:49.029Z"
+    },
+    {
+      "id": 4,
+      "value": 29.44169467906307,
+      "description": "Dependency updates",
+      "timestamp": "2025-09-02T18:05:49.029Z"
+    },
+    {
+      "id": 5,
+      "value": 66.69133103870658,
+      "description": "Security patch implementation",
+      "timestamp": "2025-09-02T18:05:49.029Z"
+    },
+    {
+      "id": 6,
+      "value": 92.9456574394246,
+      "description": "Integration with external API",
+      "timestamp": "2025-09-02T18:05:49.029Z"
+    }
+  ]
+}
