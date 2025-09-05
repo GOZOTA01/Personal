@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "value": 95.58159532678968,
+      "description": "Implemented user feedback",
+      "timestamp": "2025-09-05T18:18:38.593Z"
+    },
+    {
+      "id": 2,
+      "value": 28.207486007019334,
+      "description": "Fixed edge case scenario",
+      "timestamp": "2025-09-05T18:18:38.593Z"
+    },
+    {
+      "id": 3,
+      "value": 2.8555946042754132,
+      "description": "Security patch implementation",
+      "timestamp": "2025-09-05T18:18:38.593Z"
+    },
+    {
+      "id": 4,
+      "value": 90.492645365096,
+      "description": "Added new feature implementation",
+      "timestamp": "2025-09-05T18:18:38.593Z"
+    },
+    {
+      "id": 5,
+      "value": 54.801324278283005,
+      "description": "Added error handling",
+      "timestamp": "2025-09-05T18:18:38.593Z"
+    },
+    {
+      "id": 6,
+      "value": 84.16295765517414,
+      "description": "UI/UX improvements",
+      "timestamp": "2025-09-05T18:18:38.593Z"
+    }
+  ]
+}
